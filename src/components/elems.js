@@ -1,0 +1,12 @@
+export const imageModal = document.querySelector('.popup_type_image');
+export const imageModalImg = imageModal.querySelector('.popup__image');
+export const imageModalCaption = imageModal.querySelector('.popup__caption');
+export const profileEditModal = document.querySelector('.popup_type_edit');
+export const profileEditForm = profileEditModal.querySelector('.popup__form');
+export const newCardModal = document.querySelector('.popup_type_new-card');
+export const newCardForm = newCardModal.querySelector('.popup__form');
+export const placesList = document.querySelector('.places__list');
+export const profileTitle = document.querySelector('.profile__title');
+export const profileDescription = document.querySelector('.profile__description');
+export const editButton = document.querySelector('.profile__edit-button');
+export const addButton = document.querySelector('.profile__add-button');
