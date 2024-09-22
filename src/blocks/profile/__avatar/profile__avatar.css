@@ -1,0 +1,47 @@
+.profile__avatar {
+  overflow: hidden;
+  position: relative;
+  margin: 0 29px 0 0;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+}
+
+@media screen and (max-width: 740px) {
+  .profile__avatar {
+    margin: 0 10px 0 0;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .profile__avatar {
+    margin-right: 0;
+  }
+}
+
+.profile__avatar-image {
+  display: block;
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  background-size: cover;
+  background-position: center;
+}
+
+.profile__avatar-change {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transition: top .3s ease-in-out;
+  background: rgba(0, 0, 0, .5) no-repeat 50% url(../../../images/change-avatar.svg);
+  border: 0;
+  padding: 0;
+  color: transparent;
+  cursor: pointer;
+}
+
+.profile__avatar:hover .profile__avatar-change {
+  top: 0;
+}

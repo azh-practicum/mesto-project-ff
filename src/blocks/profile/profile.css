@@ -3,7 +3,7 @@
 @import url('./__edit-button/profile__edit-button.css');
 @import url('./__info/profile__info.css');
 @import url('./__title/profile__title.css');
-@import url('./__image/profile__image.css');
+@import url('./__avatar/profile__avatar.css');
 
 .profile {
   font-family: 'Inter', Arial, sans-serif;

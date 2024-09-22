@@ -1,3 +1,11 @@
 .popup__form {
   margin-top: 27px;
 }
+
+.popup__form_loading::before {
+  position: absolute;
+  inset: 0;
+  content: '';
+  border-radius: 10px;
+  background: rgba(255, 255, 255, .6);
+}
