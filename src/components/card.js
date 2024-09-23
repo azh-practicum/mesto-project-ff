@@ -29,7 +29,7 @@ function setImage(cardElement, data, onImageClick) {
 function setLikes(cardElement, data, onLikeButtonClick, profileId) {
   const likeButton = cardElement.querySelector('.card__like-button');
 
-  if (data.likes.find(item => item._id === profileId)) {
+  if (data.likes.some(item => item._id === profileId)) {
     likeButton.classList.add('card__like-button_is-active');
   }
 

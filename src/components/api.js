@@ -1,3 +1,20 @@
+function request(path, params = {}) {
+  return fetch(`https://mesto.nomoreparties.co/v1/wff-cohort-23${path}`, {
+    ...params,
+    headers: {
+      ...params.headers,
+      authorization: '3b9917af-204b-4e7d-87f8-6130b9e329cc',
+    },
+  })
+    .then(res => {
+      if (res.ok) {
+        return res.json();
+      }
+
+      throw new Error(`Ошибка: ${res.status}`);
+    });
+}
+
 export function getProfile() {
   return request('/users/me');
 }
@@ -8,10 +25,7 @@ export function updateProfile(data) {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      name: data.name,
-      about: data.about,
-    }),
+    body: JSON.stringify(data),
   });
 }
 
@@ -21,10 +35,7 @@ export function addCard(data) {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      name: data.name,
-      link: data.link,
-    }),
+    body: JSON.stringify(data),
   });
 }
 
@@ -58,21 +69,4 @@ export function changeAvatar(avatar) {
     },
     body: JSON.stringify({ avatar }),
   });
-}
-
-function request(path, params = {}) {
-  return fetch(`https://mesto.nomoreparties.co/v1/wff-cohort-23${path}`, {
-    ...params,
-    headers: {
-      ...params.headers,
-      authorization: '3b9917af-204b-4e7d-87f8-6130b9e329cc',
-    },
-  })
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      }
-
-      throw new Error(`Ошибка: ${res.status}`);
-    });
 }

@@ -1,17 +1,61 @@
+function getFormInputs(form, validationConfig) {
+  return Array.from(form.querySelectorAll(validationConfig.inputSelector));
+}
+
+function hasErrorInput(form, validationConfig) {
+  return getFormInputs(form, validationConfig).some(input => !input.validity.valid);
+}
+
+function markInputAsError(inputElem, validationConfig) {
+  inputElem.classList.remove(validationConfig.inputSuccessClass);
+  inputElem.classList.add(validationConfig.inputErrorClass);
+  inputElem.nextElementSibling.textContent = inputElem.validationMessage;
+}
+
+function markInputAsSuccess(inputElem, validationConfig) {
+  inputElem.classList.add(validationConfig.inputSuccessClass);
+  inputElem.classList.remove(validationConfig.inputErrorClass);
+  inputElem.nextElementSibling.textContent = '';
+}
+
+function resetInput(inputElem, validationConfig) {
+  inputElem.value = '';
+  inputElem.classList.remove(validationConfig.inputErrorClass);
+  inputElem.classList.remove(validationConfig.inputSuccessClass);
+}
+
+function disableButton(form, validationConfig) {
+  const button = form.querySelector(validationConfig.submitButtonSelector);
+
+  button.setAttribute('disabled', 'true');
+  button.setAttribute('aria-disabled', 'true');
+}
+
+function enableButton(form, validationConfig) {
+  const button = form.querySelector(validationConfig.submitButtonSelector);
+
+  button.removeAttribute('disabled');
+  button.removeAttribute('aria-disabled');
+}
+
 export function enableValidation(validationConfig) {
-  const { formSelector, inputSelector } = validationConfig;
+  const { formSelector } = validationConfig;
 
   document.querySelectorAll(formSelector).forEach(form => {
-    form.addEventListener('input', _event => {
-      setButtonActualState(form, validationConfig);
-    });
-  });
+    getFormInputs(form, validationConfig).forEach(input => {
+      input.addEventListener('input', event => {
+        const input = event.target;
 
-  document.querySelectorAll(inputSelector).forEach(input => {
-    input.addEventListener('input', event => {
-      event.target.validity.valid ?
-        markInputAsSuccess(input, validationConfig) :
-        markInputAsError(input, validationConfig);
+        input.validity.patternMismatch ?
+          input.setCustomValidity(input.dataset.errorMsg) :
+          input.setCustomValidity('');
+
+        input.validity.valid ?
+          markInputAsSuccess(input, validationConfig) :
+          markInputAsError(input, validationConfig);
+
+        setButtonActualState(form, validationConfig);
+      });
     });
   });
 }
@@ -21,60 +65,15 @@ export function clearValidation(form, validationConfig) {
     error.textContent = '';
   });
 
-  getFormInputs(form).forEach(input => {
+  getFormInputs(form, validationConfig).forEach(input => {
     resetInput(input, validationConfig);
   });
 
-  const button = form.querySelector(validationConfig.submitButtonSelector);
-
-  disableButton(button);
+  disableButton(form, validationConfig);
 }
 
 export function setButtonActualState(form, validationConfig) {
-  const hasError = hasErrorInput(form);
-  const button = form.querySelector(validationConfig.submitButtonSelector);
-
-  hasError ? disableButton(button) : enableButton(button);
-}
-
-function hasErrorInput(form) {
-  return getFormInputs(form).some(input => !input.validity.valid);
-}
-
-function markInputAsError(inputElem, validationConfig) {
-  const errorMsg = inputElem.dataset.errorMsg;
-
-  if (errorMsg) {
-    inputElem.setCustomValidity(inputElem.validity.patternMismatch ? errorMsg : '');
-  }
-
-  inputElem.classList.remove(validationConfig.inputSuccessClass);
-  inputElem.classList.add(validationConfig.inputErrorClass);
-  inputElem.nextElementSibling.textContent = inputElem.validationMessage;
-}
-
-function markInputAsSuccess(inputElem, validationConfig) {
-  inputElem.classList.add(validationConfig.inputSuccessClass);
-  inputElem.classList.remove(validationConfig.inputErrorClass);
-  inputElem.nextElementSibling.textContent = inputElem.validationMessage;
-}
-
-function resetInput(inputElem, validationConfig) {
-  inputElem.value = '';
-  inputElem.classList.remove(validationConfig.inputErrorClass);
-  inputElem.classList.remove(validationConfig.inputSuccessClass);
-}
-
-function disableButton(button) {
-  button.setAttribute('disabled', 'true');
-  button.setAttribute('aria-disabled', 'true');
-}
-
-function enableButton(button) {
-  button.removeAttribute('disabled');
-  button.removeAttribute('aria-disabled');
-}
-
-function getFormInputs(form) {
-  return Array.from(form.elements).filter(elem => elem.tagName === 'INPUT');
+  hasErrorInput(form, validationConfig) ?
+    disableButton(form, validationConfig) :
+    enableButton(form, validationConfig);
 }
